@@ -1,17 +1,59 @@
-@mixin form-control {
+$input: $grey-darker !default;
+$input-background: $white !default;
+$input-border: $grey-lighter !default;
+
+$input-hover: $grey-darker !default;
+$input-hover-border: $grey-light !default;
+
+$input-focus: $grey-darker !default;
+$input-focus-border: $link !default;
+
+$input-disabled: $text-light !default;
+$input-disabled-background: $background !default;
+$input-disabled-border: $background !default;
+
+$input-arrow: $link !default;
+
+$input-icon: $grey-lighter !default;
+$input-icon-active: $grey !default;
+
+$input-radius: $radius !default;
+
+@mixin input {
   @include control;
 
-  @each $name, $pair in $colors {
-    $color: nth($pair, 1);
+  background-color: $input-background;
+  border: 1px solid $input-border;
+  color: $input;
 
-    &.is-#{$name} {
-      border-color: $color;
+  &:hover,
+  &.is-hovered {
+    border-color: $input-hover-border;
+  }
+
+  &:focus,
+  &.is-focused,
+  &:active,
+  &.is-active {
+    border-color: $input-focus-border;
+  }
+
+  &[disabled],
+  &.is-disabled {
+    background-color: $input-disabled-background;
+    border-color: $input-disabled-border;
+    box-shadow: none;
+    color: $input-disabled;
+
+    @include placeholder {
+      color: rgba($input, 0.3);
     }
   }
 }
 
-.input {
-  @include form-control;
+.input,
+.textarea {
+  @include input;
 
   box-shadow: inset 0 1px 2px rgba($black, 0.1);
   max-width: 100%;
@@ -19,6 +61,15 @@
 
   &[type="search"] {
     border-radius: 290486px;
+  }
+
+  // Colors
+  @each $name, $pair in $colors {
+    $color: nth($pair, 1);
+
+    &.is-#{$name} {
+      border-color: $color;
+    }
   }
 
   // Sizes
@@ -47,10 +98,8 @@
 }
 
 .textarea {
-  @extend .input;
-
   display: block;
-  line-height: 1.2;
+  line-height: 1.25;
   max-height: 600px;
   max-width: 100%;
   min-height: 120px;
@@ -59,23 +108,27 @@
   resize: vertical;
 }
 
-%control-with-element {
+.checkbox,
+.radio {
+  align-items: center;
   cursor: pointer;
-  display: inline-block;
-  line-height: 16px;
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
   position: relative;
   vertical-align: top;
 
   input {
     cursor: pointer;
+    margin-right: 0.5em;
   }
 
   &:hover {
-    color: $control-hover;
+    color: $input-hover;
   }
 
   &.is-disabled {
-    color: $text-light;
+    color: $input-disabled;
     pointer-events: none;
 
     input {
@@ -84,34 +137,38 @@
   }
 }
 
-.checkbox {
-  @extend %control-with-element;
-}
-
 .radio {
-  @extend %control-with-element;
-
   & + .radio {
-    margin-left: 10px;
+    margin-left: 0.5em;
   }
 }
 
 .select {
   display: inline-block;
-  height: 32px;
+  height: 2.5em;
   position: relative;
   vertical-align: top;
 
+  &:after {
+    @include arrow($input-arrow);
+
+    margin-top: -0.375em;
+    right: 1.125em;
+    top: 50%;
+    z-index: 4;
+  }
+
   select {
-    @include form-control;
+    @include input;
 
     cursor: pointer;
     display: block;
+    font-size: 1em;
     outline: none;
-    padding-right: 36px;
+    padding-right: 2.5em;
 
     &:hover {
-      border-color: $control-hover-border;
+      border-color: $input-hover-border;
     }
 
     &::ms-expand {
@@ -119,6 +176,27 @@
     }
   }
 
+  // States
+  &:hover {
+    &:after {
+      border-color: $input-hover;
+    }
+  }
+
+  // Sizes
+  &.is-small {
+    @include control-small;
+  }
+
+  &.is-medium {
+    @include control-medium;
+  }
+
+  &.is-large {
+    @include control-large;
+  }
+
+  // Modifiers
   &.is-fullwidth {
     width: 100%;
 
@@ -126,59 +204,15 @@
       width: 100%;
     }
   }
-
-  &:after {
-    @include arrow($link);
-
-    margin-top: -6px;
-    right: 16px;
-    top: 50%;
-  }
-
-  &:hover {
-    &:after {
-      border-color: $link-hover;
-    }
-  }
-
-  &.is-small {
-    height: 24px;
-
-    select {
-      @include control-small;
-
-      padding-right: 28px;
-    }
-  }
-
-  &.is-medium {
-    height: 40px;
-
-    select {
-      @include control-medium;
-
-      padding-right: 44px;
-    }
-  }
-
-  &.is-large {
-    height: 48px;
-
-    select {
-      @include control-large;
-
-      padding-right: 52px;
-    }
-  }
 }
 
 .label {
-  color: $text-strong;
+  color: $input;
   display: block;
   font-weight: bold;
 
   &:not(:last-child) {
-    margin-bottom: 5px;
+    margin-bottom: 0.5em;
   }
 }
 
@@ -200,14 +234,16 @@
 
 .control-label {
   @include mobile {
-    margin-bottom: 5px;
+    margin-bottom: 0.5em;
   }
 
 
   @include tablet {
+    flex-basis: 0;
     flex-grow: 1;
-    margin-right: 20px;
-    padding-top: 7px;
+    flex-shrink: 0;
+    margin-right: 1.5em;
+    padding-top: 0.5em;
     text-align: right;
   }
 }
@@ -217,7 +253,7 @@
   text-align: left;
 
   &:not(:last-child) {
-    margin-bottom: 10px;
+    margin-bottom: 0.75rem;
   }
 
   // Modifiers
@@ -236,29 +272,41 @@
         z-index: 2;
       }
 
-      &:active,
-      &:focus {
+      &:focus,
+      &:active {
         z-index: 3;
       }
 
       &:first-child {
-        border-radius: $radius 0 0 $radius;
+        border-radius: $input-radius 0 0 $input-radius;
 
         select {
-          border-radius: $radius 0 0 $radius;
+          border-radius: $input-radius 0 0 $input-radius;
         }
       }
 
       &:last-child {
-        border-radius: 0 $radius $radius 0;
+        border-radius: 0 $input-radius $input-radius 0;
 
         select {
-          border-radius: 0 $radius $radius 0;
+          border-radius: 0 $input-radius $input-radius 0;
         }
       }
 
       &.is-expanded {
         flex-grow: 1;
+        flex-shrink: 0;
+      }
+    }
+
+    .select select {
+      &:hover {
+        z-index: 2;
+      }
+
+      &:focus,
+      &:active {
+        z-index: 3;
       }
     }
 
@@ -275,105 +323,99 @@
       .input,
       .select {
         flex-grow: 1;
+        flex-shrink: 0;
       }
     }
   }
 
   &.has-icon {
-    & > .fa {
-      @include fa(14px, 24px);
-
-      color: $text-light;
+    .icon {
+      color: $input-icon;
       pointer-events: none;
       position: absolute;
-      top: 4px;
+      top: $size-normal * 2.5 / 2;
       z-index: 4;
     }
 
     .input {
-      &:focus + .fa {
-        color: $text-strong;
+      &:focus {
+        & + .icon {
+          color: $input-icon-active;
+        }
       }
 
-      &.is-small + .fa {
-        font-size: 10.5px;
-        top: 0;
+      &.is-small {
+        & + .icon {
+          top: $size-small * 2.5 / 2;
+        }
       }
 
-      &.is-medium + .fa {
-        font-size: 21px;
-        top: 8px;
+      &.is-medium {
+        & + .icon {
+          top: $size-medium * 2.5 / 2;
+        }
       }
 
-      &.is-large + .fa {
-        font-size: 21px;
-        top: 12px;
+      &.is-large {
+        & + .icon {
+          top: $size-large * 2.5 / 2;
+        }
       }
     }
 
     &:not(.has-icon-right) {
-      & > .fa {
-        left: 4px;
+      .icon {
+        left: $size-normal * 2.5 / 2;
+        transform: translateX(-50%) translateY(-50%);
       }
 
       .input {
-        padding-left: 32px;
+        padding-left: 2.5em;
 
         &.is-small {
-          padding-left: 24px;
-
-          & + .fa {
-            left: 0;
+          & + .icon {
+            left: $size-small * 2.5 / 2;
           }
         }
 
         &.is-medium {
-          padding-left: 40px;
-
-          & + .fa {
-            left: 8px;
+          & + .icon {
+            left: $size-medium * 2.5 / 2;
           }
         }
 
         &.is-large {
-          padding-left: 48px;
-
-          & + .fa {
-            left: 12px;
+          & + .icon {
+            left: $size-large * 2.5 / 2;
           }
         }
       }
     }
 
     &.has-icon-right {
-      & > .fa {
-        right: 4px;
+      .icon {
+        right: $size-normal * 2.5 / 2;
+        transform: translateX(50%) translateY(-50%);
       }
 
       .input {
-        padding-right: 32px;
+        padding-right: 2.5em;
 
         &.is-small {
-          padding-right: 24px;
-
-          & + .fa {
-            right: 0;
+          & + .icon {
+            right: $size-small * 2.5 / 2;
           }
         }
 
         &.is-medium {
-          padding-right: 40px;
-
-          & + .fa {
-            right: 8px;
+          & + .icon {
+            right: $size-medium * 2.5 / 2;
           }
         }
 
         &.is-large {
-          padding-right: 48px;
-
-          & + .fa {
-            right: 12px;
+          & + .icon {
+            right: $size-large * 2.5 / 2;
           }
         }
       }
@@ -385,13 +427,17 @@
     justify-content: flex-start;
 
     & > .control {
+      flex-basis: 0;
+      flex-shrink: 0;
+
       &:not(:last-child) {
         margin-bottom: 0;
-        margin-right: 10px;
+        margin-right: 0.75rem;
       }
 
       &.is-expanded {
         flex-grow: 1;
+        flex-shrink: 1;
       }
     }
 
@@ -410,18 +456,20 @@
 
       & > .control {
         display: flex;
+        flex-basis: 0;
         flex-grow: 5;
+        flex-shrink: 1;
       }
     }
   }
 
   &.is-loading {
     &:after {
-      @extend .loader;
+      @include loader;
 
       position: absolute !important;
-      right: 8px;
-      top: 8px;
+      right: 0.75em;
+      top: 0.75em;
     }
   }
 }

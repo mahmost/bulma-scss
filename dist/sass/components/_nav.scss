@@ -1,7 +1,9 @@
+$nav-height: 3.5rem !default;
+
 // Components
 
 .nav-toggle {
-  @extend .hamburger;
+  @include hamburger($nav-height);
 
   // Responsiveness
   @include tablet {
@@ -12,28 +14,32 @@
 .nav-item {
   align-items: center;
   display: flex;
+  flex-grow: 0;
+  flex-shrink: 0;
+  font-size: $size-normal;
   justify-content: center;
-  padding: 10px;
+  padding: 0.5rem 0.75rem;
 
   a {
     flex-grow: 1;
+    flex-shrink: 0;
   }
 
   img {
-    max-height: 24px;
+    max-height: 1.75rem;
   }
 
   .button + .button {
-    margin-left: 10px;
+    margin-left: 0.75rem;
   }
 
   .tag {
-    &:first-child {
-      margin-right: 5px;
+    &:first-child:not(:last-child) {
+      margin-right: 0.5rem;
     }
 
-    &:last-child {
-      margin-left: 5px;
+    &:last-child:not(:first-child) {
+      margin-left: 0.5rem;
     }
   }
 
@@ -45,7 +51,7 @@
 
 .nav-item a,
 a.nav-item {
-  color: $text;
+  color: $text-light;
 
   &:hover {
     color: $link-hover;
@@ -59,18 +65,27 @@ a.nav-item {
   &.is-tab {
     border-bottom: 1px solid transparent;
     border-top: 1px solid transparent;
-    padding-left: 12px;
-    padding-right: 12px;
+    padding-bottom: calc(0.5rem - 1px);
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: calc(0.5rem - 1px);
 
     &:hover {
-      border-bottom: 1px solid $link;
-      border-top: 1px solid transparent;
+      border-bottom-color: $primary;
+      border-top-color: transparent;
     }
 
     &.is-active {
-      border-bottom: 3px solid $link;
-      border-top: 3px solid transparent;
-      color: $link;
+      border-bottom: 3px solid $primary;
+      color: $primary;
+      padding-bottom: calc(0.5rem - 3px);
+    }
+  }
+
+  // Responsiveness
+  @include desktop {
+    &.is-brand {
+      padding-left: 0;
     }
   }
 }
@@ -90,7 +105,7 @@ a.nav-item {
 
     .nav-item {
       border-top: 1px solid rgba($border, 0.5);
-      padding: 10px;
+      padding: 0.75rem;
     }
 
     &.is-active {
@@ -100,15 +115,20 @@ a.nav-item {
 
 
   @include tablet-only {
-    padding-right: 20px;
+    padding-right: 1.5rem;
   }
 }
 
-.nav-left {
+.nav-left,
+.nav-right {
   align-items: stretch;
-  display: flex;
   flex-basis: 0;
   flex-grow: 1;
+  flex-shrink: 0;
+}
+
+.nav-left {
+  display: flex;
   justify-content: flex-start;
   overflow: hidden;
   overflow-x: auto;
@@ -118,19 +138,19 @@ a.nav-item {
 .nav-center {
   align-items: stretch;
   display: flex;
+  flex-grow: 0;
+  flex-shrink: 0;
   justify-content: center;
   margin-left: auto;
   margin-right: auto;
 }
 
 .nav-right {
+  justify-content: flex-end;
+
   // Responsiveness
   @include tablet {
-    align-items: stretch;
     display: flex;
-    flex-basis: 0;
-    flex-grow: 1;
-    justify-content: flex-end;
   }
 }
 
@@ -150,48 +170,10 @@ a.nav-item {
     display: flex;
     min-height: $nav-height;
     width: 100%;
-
-    & > .nav-left {
-      & > .nav-item:first-child:not(.is-tab) {
-        padding-left: 0;
-      }
-    }
-
-    & > .nav-right {
-      & > .nav-item:last-child:not(.is-tab) {
-        padding-right: 0;
-      }
-    }
-  }
-
-  .container > & {
-    & > .nav-left {
-      & > .nav-item:first-child:not(.is-tab) {
-        padding-left: 0;
-      }
-    }
-
-    & > .nav-right {
-      & > .nav-item:last-child:not(.is-tab) {
-        padding-right: 0;
-      }
-    }
   }
 
   // Modifiers
   &.has-shadow {
     box-shadow: 0 2px 3px rgba($black, 0.1);
-  }
-
-  // Responsiveness
-  @include touch {
-    & > .container,
-    .container > & {
-      & > .nav-left {
-        & > .nav-item.is-brand:first-child {
-          padding-left: 20px;
-        }
-      }
-    }
   }
 }

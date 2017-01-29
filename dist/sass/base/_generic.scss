@@ -1,6 +1,9 @@
+$body-background: $white !default;
+$body-size: $size-6 !default;
+
 html {
   background-color: $body-background;
-  font-size: $size-normal;
+  font-size: $body-size;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   min-width: 300px;
@@ -32,14 +35,13 @@ pre {
   -moz-osx-font-smoothing: auto;
   -webkit-font-smoothing: auto;
   font-family: $family-code;
-  line-height: 1.25;
 }
 
 body {
   color: $text;
   font-size: 1rem;
   font-weight: $weight-normal;
-  line-height: 1.42857;
+  line-height: 1.5;
 }
 
 // Inline
@@ -58,14 +60,17 @@ a {
 code {
   background-color: $code-background;
   color: $code;
-  font-size: 12px;
+  font-size: 0.8em;
   font-weight: normal;
-  padding: 1px 2px 2px;
+  padding: 0.25em 0.5em 0.25em;
 }
 
 hr {
-  border-top-color: $border;
-  margin: 40px 0;
+  background-color: $border;
+  border: none;
+  display: block;
+  height: 1px;
+  margin: 1.5rem 0;
 }
 
 img {
@@ -78,7 +83,7 @@ input[type="radio"] {
 }
 
 small {
-  font-size: $size-small;
+  font-size: 0.8em;
 }
 
 span {
@@ -96,15 +101,17 @@ strong {
 pre {
   background-color: $pre-background;
   color: $pre;
+  font-size: 0.8em;
   white-space: pre;
   word-wrap: normal;
 
   code {
-    background-color: $pre-background;
-    color: $pre;
+    background: none;
+    color: inherit;
     display: block;
+    font-size: 1em;
     overflow-x: auto;
-    padding: 16px 20px;
+    padding: 1.25rem 1.5rem;
   }
 }
 

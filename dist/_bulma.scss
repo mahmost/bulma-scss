@@ -1,7 +1,9 @@
+/*! bulma.io v0.3.1 | MIT License | github.com/jgthms/bulma */
 @charset "utf-8";
 
-@import "sass/utilities/utilities";
-@import "sass/base/base";
-@import "sass/elements/elements";
-@import "sass/components/components";
-@import "sass/layout/layout";
+@import "sass/utilities/__all";
+@import "sass/base/__all";
+@import "sass/elements/__all";
+@import "sass/components/__all";
+@import "sass/grid/__all";
+@import "sass/layout/__all";
